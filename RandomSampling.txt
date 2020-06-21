@@ -1,0 +1,52 @@
+# random 함수를 쓰기위해
+import random
+
+## L1 = (x1 ∧ ~x11 ∧ x3) ∨ (~x5 ∧ x4) ∨ (~ x1 ∧ x3 ∧ x4) ∨ ( x10 ∧ ~x3 ∧ x14)
+## L2 = (~x4 ∧ x7 ∧ x2) ∨ (x13 ∧~ x4) ∨ ( x2 ∧~ x5 ∧ x4) ∨ ( x1 ∧ x6 ∧ ~x3)
+## L3 = (x2 ∧ ~x15 ∧~ x14) ∨ (x15 ∧ x12) ∨ ( x5 ∧ ~x1 ∧~ x3) ∨ ( x5 ∧ x3 ∧ x8)
+## L4 = (x9 ∧ x1 ∧ x12) ∨ (~x5 ∧ x1) ∨ ( x3 ∧ x6 ∧ ~x9) ∨ ( ~x11 ∧ x13 ∧~ x15)
+
+# ~x 값을 구하기 위해 0 <-> 1 로 변경해주는 함수 선언
+def rvs(x):   
+  return 7-x
+
+# 테스트 수행 횟수 입력값으로 받음
+test_cnt = int(input("How many tests do you want to run: "))
+
+# x는 비트가 3인 15개 변수일 때 가능한 입력값의 수 (2**3)**15
+#test_cnt = (2**3)**15
+
+# 수식 L1 | L2 | L3 | L4 == 7 만족 하는 횟수를 저장할 변수 선언
+count = 0  
+
+# random함수를 이용하여 변수 x01 ~ x15에 0에서 7까지 난수 입력
+for i in range(test_cnt):
+  x01 = random.randint(0,8)
+  x02 = random.randint(0,8)
+  x03 = random.randint(0,8)
+  x04 = random.randint(0,8)
+  x05 = random.randint(0,8)
+  x06 = random.randint(0,8)
+  x07 = random.randint(0,8)
+  x08 = random.randint(0,8)
+  x09 = random.randint(0,8)
+  x10 = random.randint(0,8)
+  x11 = random.randint(0,8)
+  x12 = random.randint(0,8)
+  x13 = random.randint(0,8)
+  x14 = random.randint(0,8)
+  x15 = random.randint(0,8)
+  
+  L1=(x01 & rvs(x11) & x03) | (rvs(x05) & x04) | (rvs(x01) & x03 & x04) | (x10 & rvs(x03) & x14)
+  L2=(rvs(x04) & x07 & x02) | (x13 & rvs(x04)) | (x02 & rvs(x05) & x04) | (x01 & x06 & rvs(x03))
+  L3=(x02 & rvs(x15) & rvs(x14)) | (x15 & x12) | (x05 & rvs(x01) & rvs(x03)) | (x05 & x03 & x08)
+  L4=(x09 & x01 & x12) & (rvs(x05) & x01) | (x03 & x06 & rvs(x09)) | (rvs(x11) & x13 & rvs(x15))
+
+# 수식 만족시 count 변수 값 +1 증가
+  if L1 | L2 | L3 | L4 == 7:
+    count = count + 1
+
+
+# 결과 값 출력
+print("The number of running the test: ",test_cnt)
+print("The number of satisfying assignments( L = 111 ) of a formula: ",count)

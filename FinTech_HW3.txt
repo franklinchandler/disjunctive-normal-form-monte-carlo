@@ -1,0 +1,124 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue May 12 17:31:29 2020
+
+@author: Franklin
+"""
+
+#step 1, find all the base solutions of C1-C16
+#step 2, make a function to test them
+
+import numpy as np
+import random as ra
+
+def c(j,*args):
+  truth = 7
+  if j==0:
+      val = args[0] & ~args[1] & args[2]
+  elif j==1:
+      val = ~args[0] & args[1]
+  elif j==2:
+      val = ~args[0] & args[1] & args[2]
+  elif j==3:
+      val = args[0] & ~args[1] & args[2]
+  elif j==4:
+      val = ~args[0] & args[1] & args[2]
+  elif j==5:
+      val = args[0] & ~args[1] 
+  elif j==6:
+      val = args[0] & ~args[1] & args[2]
+  elif j==7:
+      val = args[0] & args[1] & ~args[2]
+  elif j==8:
+      val = args[0] & ~args[1] & ~args[2]
+  elif j==9:
+      val = args[0] & args[1] 
+  elif j==10:
+      val = args[0] & ~args[1] & ~args[2]
+  elif j==11:
+      val = args[0] & args[1] & args[2]
+  elif j==12:
+      val = args[0] & args[1] & args[2]
+  elif j==13:
+      val = ~args[0] & args[1] 
+  elif j==14:
+      val = args[0] & args[1] & ~args[2]
+  elif j==15:
+      val = ~args[0] & args[1] & ~args[2]
+    
+  val = val & 0b0111
+  test = val == truth
+  return test
+
+nx = [3, 2, 3, 3,3, 2, 3, 3,3, 2, 3, 3,3, 2, 3, 3]
+c_vars = [[0,10,2],[4,3],[0,2,3],[9,2,13],[3,6,1],[12,3],[1,4,3],[0,5,2],[1,14,13],[14,11],[4,0,2],[4,2,7],[8,0,11],[4,0],[2,5,8],[10,12,14]]
+#nx is number of variables in each clause
+bs = []
+clausenum = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+for j in clausenum:
+  if nx[j] == 3:
+    #ct = -1 
+    var1 = [0, 1, 2, 3, 4, 5, 6, 7]
+    var2 = [0, 1, 2, 3, 4, 5, 6, 7]
+    var3 = [0, 1, 2, 3, 4, 5, 6, 7]
+    #initialize base solution set of j for this clause
+    for jj in var1 :
+      for ji in var2 :
+        for jv in var3 :
+            test = c(j, jj, ji, jv)
+            if test == True:
+                bs.append([jj,ji,jv])
+  elif nx[j] == 2:
+    ct = -1
+    var1 = [0, 1, 2, 3, 4, 5, 6, 7]
+    var2 = [0, 1, 2, 3, 4, 5, 6, 7]
+    for jj in var1:
+      for ji in var2:
+        test = c(j,jj,ji)
+        if test == True:
+            bs.append([jj,ji])
+
+#next we randomly pick clauses to generate solutions to
+#over a given number of attempts
+            
+total = 0
+totn = 10001
+for n in range(totn):
+    
+#uniform random number selection in j
+  j = ra.randint(0, 15)
+  randset = bs[j]
+  varnums = c_vars[j]
+#at some point need to track specific variables
+# so lets assign them here
+######################################################
+  #for all x not equal to the ones in the basic solution set
+######################################################
+  ct = -1
+  x = []
+  for i in range(0, 16):
+      if any(np.equal(np.array(i),np.array(varnums))):
+          ct = ct + 1
+          x.append(randset[ct])
+      else:
+          x.append(ra.randint(0, 7))
+  randtest = []
+  for jj in range(0, 16):
+      inds = c_vars[jj]
+      x2 = []
+      for kk in inds:
+          x2.append(x[kk])
+      if len(inds)==3:
+          randtest.append(c(jj, x2[0],x2[1],x2[2]))
+      elif len(inds)==2:
+          randtest.append(c(jj, x2[0],x2[1]))
+  subtotal = sum(randtest)
+  total = total + subtotal
+p = total/totn
+#p is the ratio estimate
+subtota = []
+for j in range(0,16):
+  subtota.append(8.0**(15.0-float(nx[j])))
+totaldenom = sum(subtota)
+numsolutions = p * totaldenom
+##END##
