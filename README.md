@@ -1,4 +1,18 @@
 # disjunctive-normal-form-monte-carlo
+Please see the .jpg for the problem assignment. 
+
+For this project we set out assuming that the possible universe of solutions was 8^15, and that hard solving 
+using random sampling would be wildly insufficient. For example a sample of 10 million, would still be less 
+than .00002% of our entire population. This meant that sample error could deviate exponentially per sample. 
+Later on, we would realize that the professor had taken special care to make sure that this was not the case, 
+but at the start it was quite a perplexing problem.
+
+After some research, we discovered a graduate computer science lecture at MIT discussing sampling from such 
+problem sets. Instead of hard solving for the values randomly, we designed an algorithm following the MIT lesson
+that would sample from assignments that already were the solution for one clause. The idea was to sample only 
+'the important space' non-uniformly to optimize the results of our algorithm.
+
+Using random sampling as a base, we can see that our algorithm generated nearly identical solution for the problem.
 
 과제를 수행하기에 앞서 저희 조는 문제의 풀이과정을 이해해보려고 하였습니다.
 x의 값은 3 bits (000, 0001, 010, ..., 111) 이기에 0-7의 불규칙적 숫자로이루어져 있으며 총 x1-x15 변수로 구성되있습니다. 
