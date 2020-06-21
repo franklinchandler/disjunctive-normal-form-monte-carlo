@@ -1,5 +1,5 @@
 # disjunctive-normal-form-monte-carlo
-Please see the .jpg for the problem assignment. 
+Please see the .png for the problem assignment. 
 
 For this project we set out assuming that the possible universe of solutions was 8^15, and that hard solving 
 using random sampling would be wildly insufficient. For example a sample of 10 million, would still be less 
